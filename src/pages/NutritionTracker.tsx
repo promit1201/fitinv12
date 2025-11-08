@@ -223,11 +223,11 @@ const NutritionTracker = () => {
                     console.error('Upgrade error:', error);
                     toast.error('Failed to upgrade. Please try again.');
                   } else {
-                    toast.success('🎉 Upgraded to Premium! Reloading...');
+                    toast.success('🎉 Upgraded to Premium!');
                     // Full page reload to refresh all state
                     setTimeout(() => {
-                      window.location.href = '/premium-nutrition-tracker';
-                    }, 1000);
+                      window.location.reload();
+                    }, 800);
                   }
                 }}
                 className="border-primary/50 hover:bg-primary/10"
