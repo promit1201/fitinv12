@@ -220,12 +220,13 @@ const NutritionTracker = () => {
                     }, { onConflict: 'user_id' });
                   
                   if (error) {
-                    toast.error('Failed to upgrade');
+                    console.error('Upgrade error:', error);
+                    toast.error('Failed to upgrade. Please try again.');
                   } else {
-                    toast.success('🎉 Upgraded to Premium! Redirecting...');
-                    // Wait a moment for user to see the success message
+                    toast.success('🎉 Upgraded to Premium! Reloading...');
+                    // Full page reload to refresh all state
                     setTimeout(() => {
-                      navigate('/premium-nutrition-tracker');
+                      window.location.href = '/premium-nutrition-tracker';
                     }, 1000);
                   }
                 }}
