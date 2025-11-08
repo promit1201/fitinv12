@@ -14,7 +14,7 @@ const PremiumNutritionTracker = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // Fetch user details
+  // Fetch user details from profiles
   const { data: userDetails, isLoading: detailsLoading } = useQuery({
     queryKey: ['user-details'],
     queryFn: async () => {
@@ -22,13 +22,20 @@ const PremiumNutritionTracker = () => {
       if (!user) throw new Error('Not authenticated');
       
       const { data, error } = await supabase
-        .from('user_details')
+        .from('profiles')
         .select('*')
         .eq('user_id', user.id)
         .single();
       
       if (error) throw error;
-      return data;
+      // Map profiles columns to expected format
+      return {
+        age: data.age,
+        weight: data.weight_kg,
+        height: data.height_cm,
+        gender: 'male', // Default since profiles doesn't have gender
+        activity_level: data.activity_level,
+      };
     },
   });
 

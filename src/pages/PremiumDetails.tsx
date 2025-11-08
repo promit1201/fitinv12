@@ -50,17 +50,16 @@ const PremiumDetails = () => {
         return;
       }
 
-      // Save user details
+      // Save user details to profiles table
       const { error: detailsError } = await supabase
-        .from('user_details')
-        .upsert({
-          user_id: user.id,
+        .from('profiles')
+        .update({
           age: validated.age,
-          weight: validated.weight,
-          height: validated.height,
-          gender: validated.gender,
+          weight_kg: validated.weight,
+          height_cm: validated.height,
           activity_level: validated.activity_level,
-        }, { onConflict: 'user_id' });
+        })
+        .eq('user_id', user.id);
 
       if (detailsError) throw detailsError;
 
