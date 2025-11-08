@@ -69,12 +69,8 @@ const PremiumNutritionTracker = () => {
     }
   }, [userDetails, detailsLoading, navigate]);
 
-  // Redirect to free tracker if user doesn't have paid plan
-  useEffect(() => {
-    if (userPlan && !isPaidPlan) {
-      navigate('/nutrition-tracker');
-    }
-  }, [userPlan, isPaidPlan, navigate]);
+  // Don't redirect - we want to allow users to access this page
+  // The buttons will be unlocked if they have a paid plan
 
   useEffect(() => {
     const checkAuth = async () => {

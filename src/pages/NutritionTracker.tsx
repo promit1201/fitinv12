@@ -89,6 +89,28 @@ const NutritionTracker = () => {
     },
   });
 
+  // Real-time updates for meal logs
+  useEffect(() => {
+    const channel = supabase
+      .channel('meal-logs-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'meal_logs',
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['meal-logs', selectedDate] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [selectedDate, queryClient]);
+
   // Add meal mutation
   const addMeal = useMutation({
     mutationFn: async () => {
@@ -200,8 +222,11 @@ const NutritionTracker = () => {
                   if (error) {
                     toast.error('Failed to upgrade');
                   } else {
-                    toast.success('Upgraded to Premium!');
-                    navigate('/premium/dashboard');
+                    toast.success('🎉 Upgraded to Premium! Redirecting...');
+                    // Wait a moment for user to see the success message
+                    setTimeout(() => {
+                      navigate('/premium-nutrition-tracker');
+                    }, 1000);
                   }
                 }}
                 className="border-primary/50 hover:bg-primary/10"

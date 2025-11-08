@@ -88,6 +88,28 @@ const CutDietLogs = () => {
     },
   });
 
+  // Real-time updates for meal logs
+  useEffect(() => {
+    const channel = supabase
+      .channel('meal-logs-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'meal_logs',
+        },
+        () => {
+          queryClient.invalidateQueries({ queryKey: ['meal-logs', selectedDate] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [selectedDate, queryClient]);
+
   // Calculate totals
   const totals = mealLogs.reduce(
     (acc, meal) => ({
@@ -158,10 +180,7 @@ const CutDietLogs = () => {
   const [editingMeals, setEditingMeals] = useState<Record<string, any>>({});
 
   const handleAddMeal = (mealType: string, data: any) => {
-    if (!isAdmin) {
-      toast.error('Only admins can modify meals');
-      return;
-    }
+    // All users can log meals
     addMealMutation.mutate({ mealType, ...data });
   };
 
@@ -255,9 +274,6 @@ const CutDietLogs = () => {
                           <p className="text-sm text-muted-foreground">{meal.time}</p>
                         </div>
                       </div>
-                      {!isAdmin && (
-                        <Lock className="w-5 h-5 text-muted-foreground" />
-                      )}
                     </div>
 
                     {/* Logged meals */}
@@ -270,8 +286,7 @@ const CutDietLogs = () => {
                               {loggedMeal.calories} kcal • P: {loggedMeal.protein}g • C: {loggedMeal.carbs}g • F: {loggedMeal.fat}g
                             </p>
                           </div>
-                          {isAdmin && (
-                            <Button
+                           <Button
                               variant="ghost"
                               size="icon"
                               onClick={() => deleteMealMutation.mutate(loggedMeal.id)}
@@ -279,14 +294,12 @@ const CutDietLogs = () => {
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>
-                          )}
                         </div>
                       </div>
                     ))}
 
-                    {/* Add meal form */}
-                    {isAdmin && (
-                      <div className="space-y-2 mt-4">
+                    {/* Add meal form - available to all users */}
+                    <div className="space-y-2 mt-4">
                         <Input
                           placeholder="Meal name"
                           onChange={(e) => setEditingMeals({ ...editingMeals, [meal.id]: { ...editingMeals[meal.id], name: e.target.value } })}
@@ -330,7 +343,6 @@ const CutDietLogs = () => {
                           Add
                         </Button>
                       </div>
-                    )}
                   </Card>
                 );
               })}
