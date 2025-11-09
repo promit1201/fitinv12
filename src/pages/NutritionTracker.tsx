@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowLeft, LogOut, Plus, Trash2, Lock } from 'lucide-react';
+import { ArrowLeft, LogOut, Plus, Trash2 } from 'lucide-react';
 import logo from '@/assets/fitin-final-logo.jpg';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -204,44 +204,13 @@ const NutritionTracker = () => {
               </Button>
               <img src={logo} alt="FitIn" className="h-10 w-auto" />
             </div>
-            <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                onClick={async () => {
-                  const { data: { user } } = await supabase.auth.getUser();
-                  if (!user) return;
-                  
-                  // Update plan to paid
-                  const { error } = await supabase
-                    .from('user_plans')
-                    .upsert({
-                      user_id: user.id,
-                      plan_type: 'paid',
-                    }, { onConflict: 'user_id' });
-                  
-                  if (error) {
-                    console.error('Upgrade error:', error);
-                    toast.error('Failed to upgrade. Please try again.');
-                  } else {
-                    toast.success('🎉 Upgraded to Premium! Reloading...');
-                    // Full page reload to refresh all state
-                    setTimeout(() => {
-                      window.location.href = '/premium-nutrition-tracker';
-                    }, 1000);
-                  }
-                }}
-                className="border-primary/50 hover:bg-primary/10"
-              >
-                Upgrade to Premium
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={handleLogout}
-                className="text-muted-foreground hover:text-primary"
-              >
-                <LogOut className="w-4 h-4" />
-              </Button>
-            </div>
+            <Button
+              variant="ghost"
+              onClick={handleLogout}
+              className="text-muted-foreground hover:text-primary"
+            >
+              <LogOut className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </div>
@@ -255,10 +224,10 @@ const NutritionTracker = () => {
         >
           <div className="mb-8">
             <h1 className="text-4xl font-bold mb-2">
-              Free <span className="text-gradient">Nutrition Tracker</span>
+              <span className="text-gradient">Nutrition Tracker</span>
             </h1>
             <p className="text-muted-foreground">
-              Track your daily calories and macros (Maintenance calories only)
+              Track your daily calories, macros, workouts and progress
             </p>
           </div>
 
@@ -400,46 +369,19 @@ const NutritionTracker = () => {
             )}
           </Card>
 
-          {/* Premium Features Locked */}
+          {/* Additional Features */}
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="glass-card p-6 rounded-2xl relative overflow-hidden">
-              <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-10">
-                <div className="text-center">
-                  <Lock className="w-12 h-12 mx-auto mb-3 text-primary" />
-                  <p className="font-semibold mb-2">Premium Feature</p>
-                  <Button onClick={() => navigate('/premium')} size="sm">
-                    Upgrade Now
-                  </Button>
-                </div>
-              </div>
+            <Card className="glass-card p-6 rounded-2xl">
               <RestDayCalendar />
             </Card>
 
-            <Card className="glass-card p-6 rounded-2xl relative overflow-hidden">
-              <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-10">
-                <div className="text-center">
-                  <Lock className="w-12 h-12 mx-auto mb-3 text-primary" />
-                  <p className="font-semibold mb-2">Premium Feature</p>
-                  <Button onClick={() => navigate('/premium')} size="sm">
-                    Upgrade Now
-                  </Button>
-                </div>
-              </div>
+            <Card className="glass-card p-6 rounded-2xl">
               <WorkoutLogging />
             </Card>
           </div>
 
           <div className="mt-6">
-            <Card className="glass-card p-6 rounded-2xl relative overflow-hidden">
-              <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-10">
-                <div className="text-center">
-                  <Lock className="w-12 h-12 mx-auto mb-3 text-primary" />
-                  <p className="font-semibold mb-2">Premium Feature</p>
-                  <Button onClick={() => navigate('/premium')} size="sm">
-                    Upgrade Now
-                  </Button>
-                </div>
-              </div>
+            <Card className="glass-card p-6 rounded-2xl">
               <StrengthProgressionChart />
             </Card>
           </div>
