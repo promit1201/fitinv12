@@ -13,13 +13,26 @@ const Premium = () => {
   const [userName, setUserName] = useState('Promit Bhar');
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const checkAuthAndDetails = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         navigate('/auth');
+        return;
+      }
+
+      // Check if user has details
+      const { data: userDetails } = await supabase
+        .from('user_details')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .maybeSingle();
+
+      // If no details, redirect to welcome flow
+      if (!userDetails) {
+        navigate('/premium/welcome');
       }
     };
-    checkAuth();
+    checkAuthAndDetails();
   }, [navigate]);
 
   const handleLogout = async () => {
