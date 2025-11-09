@@ -64,8 +64,8 @@ const PremiumDetails = () => {
 
       if (detailsError) throw detailsError;
 
-      toast.success('Details saved successfully!');
-      navigate('/nutrition-tracker');
+      toast.success('Details saved! Now choose your goal.');
+      navigate('/premium-nutrition-tracker');
     } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);

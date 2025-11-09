@@ -255,7 +255,7 @@ const WorkoutPlanner = () => {
             <Button 
               onClick={() => {
                 setShowPremiumModal(false);
-                navigate('/premium');
+                navigate('/premium-nutrition-tracker');
               }} 
               className="w-full"
             >
@@ -297,7 +297,7 @@ const WorkoutPlanner = () => {
               </div>
             </div>
             <Button 
-              onClick={() => navigate('/premium')} 
+              onClick={() => navigate('/premium-nutrition-tracker')} 
               className="w-full"
             >
               Get Premium Plan
@@ -448,7 +448,7 @@ const WorkoutPlanner = () => {
                     <p className="text-muted-foreground mb-4">Want a customized plan?</p>
                     <div className="flex gap-3">
                       <Button 
-                        onClick={() => navigate('/premium')}
+                        onClick={() => navigate('/premium-nutrition-tracker')}
                         className="flex-1"
                         variant="outline"
                       >
@@ -456,7 +456,7 @@ const WorkoutPlanner = () => {
                         Cut
                       </Button>
                       <Button 
-                        onClick={() => navigate('/premium')}
+                        onClick={() => navigate('/premium-nutrition-tracker')}
                         className="flex-1"
                         variant="outline"
                       >
@@ -612,7 +612,7 @@ const WorkoutPlanner = () => {
               </li>
             </ul>
             <Button 
-              onClick={() => navigate('/premium')}
+              onClick={() => navigate('/premium-nutrition-tracker')}
               className="w-full bg-yellow-500 text-black hover:bg-yellow-400"
             >
               Get Premium Plan
