@@ -71,11 +71,12 @@ const Hero = () => {
             personalized training, and a community that supports your journey.
           </motion.p>
 
-          {/* CTA Button */}
+          {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <Button
               size="lg"
@@ -83,6 +84,14 @@ const Hero = () => {
               className="bg-primary text-primary-foreground hover:shadow-lavender-glow-strong px-12 py-6 text-lg font-semibold transition-all duration-300 hover:scale-105"
             >
               Join Now
+            </Button>
+            <Button
+              size="lg"
+              onClick={() => navigate('/premium')}
+              variant="outline"
+              className="border-primary/50 hover:bg-primary/10 px-12 py-6 text-lg font-semibold transition-all duration-300 hover:scale-105"
+            >
+              Join Premium
             </Button>
           </motion.div>
 

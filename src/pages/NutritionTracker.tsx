@@ -18,6 +18,7 @@ import { RestDayCalendar } from '@/components/nutrition/RestDayCalendar';
 import { WorkoutLogging } from '@/components/nutrition/WorkoutLogging';
 import { StrengthProgressionChart } from '@/components/nutrition/StrengthProgressionChart';
 import { calculateMaintenanceCalories } from '@/lib/calorieCalculator';
+import DietPlanSelector from '@/components/DietPlanSelector';
 
 const NutritionTracker = () => {
   const navigate = useNavigate();
@@ -227,8 +228,14 @@ const NutritionTracker = () => {
               <span className="text-gradient">Nutrition Tracker</span>
             </h1>
             <p className="text-muted-foreground">
-              Track your daily calories, macros, workouts and progress
+              Track your daily calories, macros, workouts and choose your diet plan
             </p>
+          </div>
+
+          {/* Diet Plan Selector */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-6">Choose Your Diet Plan</h2>
+            <DietPlanSelector />
           </div>
 
           {/* Date Selector */}
