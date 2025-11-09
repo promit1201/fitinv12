@@ -22,39 +22,15 @@ const Auth = () => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        // Check if user has details
-        const { data: userDetails } = await supabase
-          .from('user_details')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .maybeSingle();
-        
-        // Redirect based on whether they have details
-        if (userDetails) {
-          navigate('/premium');
-        } else {
-          navigate('/premium/welcome');
-        }
+        navigate('/premium/welcome');
       }
     };
     checkSession();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session && event === 'SIGNED_IN') {
-        // Check if user has details after sign in
-        const { data: userDetails } = await supabase
-          .from('user_details')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .maybeSingle();
-        
-        // Redirect based on whether they have details
-        if (userDetails) {
-          navigate('/premium');
-        } else {
-          navigate('/premium/welcome');
-        }
+        navigate('/premium/welcome');
       }
     });
 
@@ -100,21 +76,8 @@ const Auth = () => {
       }
 
       if (data.user) {
-        // Check if user has details
-        const { data: userDetails } = await supabase
-          .from('user_details')
-          .select('*')
-          .eq('user_id', data.user.id)
-          .maybeSingle();
-        
         toast.success('Welcome back!');
-        
-        // Redirect based on whether they have details
-        if (userDetails) {
-          navigate('/premium');
-        } else {
-          navigate('/premium/welcome');
-        }
+        navigate('/premium/welcome');
       }
     } catch (error: any) {
       toast.error('An unexpected error occurred');
@@ -168,7 +131,7 @@ const Auth = () => {
 
       if (data.user) {
         toast.success('Account created successfully! Redirecting...');
-        // New users always go to welcome flow to enter details
+        // Auto-login after signup
         navigate('/premium/welcome');
       }
     } catch (error: any) {
