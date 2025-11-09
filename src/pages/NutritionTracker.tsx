@@ -30,9 +30,15 @@ const NutritionTracker = () => {
   const [carbs, setCarbs] = useState('');
   const [fat, setFat] = useState('');
 
-  // Redirect to premium nutrition tracker
+  // Check authentication
   useEffect(() => {
-    navigate('/premium-nutrition-tracker', { replace: true });
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        navigate('/auth');
+      }
+    };
+    checkAuth();
   }, [navigate]);
 
   // Fetch user details
